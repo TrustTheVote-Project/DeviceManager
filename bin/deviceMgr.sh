@@ -129,19 +129,6 @@ fi
 
 
 buildCBC () {
-#
-#$DLG --timeout 5 --msgbox "Building the Central Ballot Counter ISO" 10 40
-
-#we need data for the CBC...
-#FILE=$(dialog --title "Select an Election Definition file..." --stdout --fselect /tmp/ 14 48)
-#$DLG --title "Select an Election Definition File..." --stdout --fselect / 10 40 2>$TEMP
-#echo `cat $TEMP`
-
-#$DLG --timeout 5 --msgbox "Creating the Central Ballot Counter with $FILE" 10 40
-
-#for i in $(seq 0 10 100) ; do sleep 1; echo $i | $DLG --gauge "Writing DVD..." 10 70 0; done
-
-#$DLG --timeout 5 --msgbox "DVD successfully created, please remove it, label it properly, and store it SECURELY!" 10 40
 
 getCBCConfigInfo
 if [[ $? == 0 ]]
@@ -165,8 +152,7 @@ fi
 }
 
 buildPrecinctBallotCounter() {
-#
-#$DLG --timeout 5 --msgbox "Building the Precinct Ballot Counter ISO" 10 40
+
 getPBCConfigInfo
 if [[ $? == 0 ]]
 then
