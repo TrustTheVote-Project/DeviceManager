@@ -37,31 +37,32 @@ The bin directory contains most of the scripts and executables.  The ISO directo
 
 
 Also required (install with the given dnf commands):
-Lorax
 
-&nbsp;&nbsp;&nbsp;&nbsp;dnf install lorax
+- Lorax
 
-Anaconda
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dnf install lorax
 
-&nbsp;&nbsp;&nbsp;&nbsp;dnf install anaconda
+- Anaconda
 
-xml lint
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dnf install anaconda
 
-&nbsp;&nbsp;&nbsp;&nbsp;dnf install libxml2
+- xml lint
 
-dialog
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dnf install libxml2
 
-&nbsp;&nbsp;&nbsp;&nbsp;dnf install dialog
+- dialog
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dnf install dialog
 
 Your Fedora v26 distribution probably already has these, but just in case isosize and sha512sum don't work, install these, too:
 
-/usr/bin/sha512sum
+- sha512sum
 
-&nbsp;&nbsp;&nbsp;&nbsp;dnf install coreutils
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dnf install coreutils
 
-/usr/bin/isosize
+- isosize
 
-&nbsp;&nbsp;&nbsp;&nbsp;dnf install util-linux
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dnf install util-linux
 
 These last two are only used when reclaiming the EDF and tool configuration json files as piggyback data, which is really unimplemented at this point, but just in case you're curious and want to play with it.
 
