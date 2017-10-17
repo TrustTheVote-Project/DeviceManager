@@ -1,9 +1,9 @@
 # DeviceManager
 
 The Device Manager is a voting system component that is part of the ElectOS election technology framework. The Device Manager (DM) manages the configuration of the ElectOS components that perform functions of ballot casting and counting.  There are currently three components:
--         Central Ballot Counter (CBC)
--         Precinct Ballot Counter (PBC)
--         Tabulator (Tab).
+- Central Ballot Counter (CBC)
+- Precinct Ballot Counter (PBC)
+- Tabulator (Tab).
 
 The DeviceManager manages the configuration and creation of the 3 tools above.  It requires an Election Data File during the configuration, then acquires configuration for the selected tool (e.g. CBC), tars and compresses the EDF and config file onto the pre-prepared ISO and writes the combined ISO+Data to a new bootable DVD.  When the DVD boots, it boots directly into the given tool, which reclaims* the configuration and EDF and performs its job.
 
@@ -15,7 +15,7 @@ The DeviceManager resides at /opt/OSET/bin/deviceMgr.sh.  This is the entry poin
 
 ## Getting Started
 
-These instructions will get a copy of the project up and running on your local machine for development and testing purposes. 
+These instructions will get a copy of the project up and running on your local machine for development and testing purposes.
 
 ### Prerequisites
 
@@ -24,9 +24,13 @@ This software is based on Fedora Workstation v26.  That version can be found [he
 After installing Fedora 26, you'll need this project.  Git clone it to your local workstation and you will have the following layout:
 
 /opt/OSET
+
 &nbsp;&nbsp;&nbsp;&nbsp;bin
+
 &nbsp;&nbsp;&nbsp;&nbsp;ISO
-&nbsp;&nbsp;&nbsp;&nbsp;LiveISO	
+
+&nbsp;&nbsp;&nbsp;&nbsp;LiveISO
+
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rpmRepo
 
 The bin directory contains most of the scripts and executables.  The ISO directory (**should** - see footnote) contains prebuilt ISOs for the DM, the PBC, CBC, and Tabulator.  The LiveISO directory contains scripts to build the aforementioned ISOs, as well as create the repository of required RPMs that support the creation of bootable ISOs.
@@ -34,19 +38,29 @@ The bin directory contains most of the scripts and executables.  The ISO directo
 
 Also required (install with the given dnf commands):
 Lorax
+
 &nbsp;&nbsp;&nbsp;&nbsp;dnf install lorax
+
 Anaconda
+
 &nbsp;&nbsp;&nbsp;&nbsp;dnf install anaconda
+
 xml lint
+
 &nbsp;&nbsp;&nbsp;&nbsp;dnf install libxml2
+
 dialog
+
 &nbsp;&nbsp;&nbsp;&nbsp;dnf install dialog
 
 Your Fedora v26 distribution probably already has these, but just in case isosize and sha512sum don't work, install these, too:
+
 /usr/bin/sha512sum
+
 &nbsp;&nbsp;&nbsp;&nbsp;dnf install coreutils
 
 /usr/bin/isosize
+
 &nbsp;&nbsp;&nbsp;&nbsp;dnf install util-linux
 
 These last two are only used when reclaiming the EDF and tool configuration json files as piggyback data, which is really unimplemented at this point, but just in case you're curious and want to play with it.
@@ -95,7 +109,7 @@ This should pop up a VM window and let you select an Image to boot - select the 
 ## Author(s)
 
 - **Bret Schuhmacher** - initial work - [https://github.com/oset-bschuhma](https://github.com/oset-bschuhma)
-	
+
 Please feel free to provide feedback on any items required and missing in this "how-to".  I *really* hate a README that isn't complete or leaves questions unanswered!!
 
 See also the list of [contributors](https://github.com/orgs/TrustTheVote-Project/people) who participated in this project.
