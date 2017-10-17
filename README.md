@@ -7,7 +7,7 @@ The Device Manager is a voting system component that is part of the ElectOS elec
 
 The DeviceManager manages the configuration and creation of the 3 tools above.  It requires an Election Data File during the configuration, then acquires configuration for the selected tool (e.g. CBC), tars and compresses the EDF and config file onto the pre-prepared ISO and writes the combined ISO+Data to a new bootable DVD.  When the DVD boots, it boots directly into the given tool, which reclaims* the configuration and EDF and performs its job.
 
-The DeviceManager resides at /opt/OSET/bin/deviceMgr.sh.  This is the entry point to the various configuration tools.  Those tool configurations are not meant to be run individually.
+The DeviceManager resides at /opt/OSET/bin/deviceMgr.sh.  This is the entry point to the various configuration tools.  Those configuration tools are not meant to be run individually.
 
 
 *** Tested, but unimplemented - see /opt/OSET/bin/recoverPiggyBackData.sh for details.**
@@ -97,11 +97,13 @@ You can install qemu with this command:
 &nbsp;&nbsp;&nbsp;&nbsp;dnf install qemu
 
 Create an image file (this is a one-time requirement):
+
     dd if=/dev/zero of=image.raw bs=1M count=5000
 This will create a 5GB image file you can use in the next step.
 
 
 Once installed, use this command to start a VM with your ISO:
+
     qemu-system-x86_64 -drive file=<path to your image file>,format=raw -boot d -cdrom <path to your ISO file> -m 2048
 
 This should pop up a VM window and let you select an Image to boot - select the topmost choice and continue.  Once fully booted and you arrive at the command prompt, log in with a username and password of "osetuser" (without quotes).  You should immediately see the tool's UI; if you're testing the DM ISO, you'll be in the DM's UI.
