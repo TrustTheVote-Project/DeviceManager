@@ -130,3 +130,5 @@ Footnote
 
 **** NOTE regarding prebuilt ISO images
 **	I am currently tyring to check in the prebuilt ISO images.  As ISOs, they are quite large - too large for git to handle natively.  They require git lfs (large file storage), which, by default requires payment to GitHub.  It was decided to put the files in S3, but git lfs and S3 support is not well supported; the 2 git lfs s3 implementations I found are years old, the git lfs spec has changed, and neither app has been maintained.  The authors of the apps are not responding to email requests, either.  I wanted to get the basic stuff I could get into git out there and then continue work on git lfs s3 support in the background.  I didn't want putting the ISOs under source code control to block other development for those working on SELinux issues or other items.  You will have to build your own ISOs until I get the ISOs checked into S3.  Sorry. :-(
+
+Update, 10/29/17 - all 4 ISOs are available in S3 if you have access to the project's s3://oset-large-file-storage bucket.
