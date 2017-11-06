@@ -5,13 +5,9 @@ The Device Manager is a voting system component that is part of the ElectOS elec
 - Precinct Ballot Counter (PBC)
 - Tabulator (Tab).
 
-The DeviceManager manages the configuration and creation of the 3 tools above.  It requires an Election Data File during the configuration, then acquires configuration for the selected tool (e.g. CBC), tars and compresses the EDF and config file onto the pre-prepared ISO and writes the combined ISO+Data to a new bootable DVD.  When the DVD boots, it boots directly into the given tool, which reclaims* the configuration and EDF and performs its job.
+The DeviceManager manages the configuration and creation of the 3 tools above.  It requires an Election Data File during the configuration, then acquires configuration for the selected tool (e.g. CBC), tars and compresses the EDF and config file onto the pre-prepared ISO and writes the combined ISO+Data to a new bootable DVD.  When the DVD boots, it boots directly into the given tool, which reclaims the configuration and EDF and performs its job.
 
 The DeviceManager resides at /opt/OSET/bin/deviceMgr.sh.  This is the entry point to the various configuration tools.  Those configuration tools are not meant to be run individually.
-
-
-*** Tested, but unimplemented - see /opt/OSET/bin/recoverPiggyBackData.sh for details.**
-
 
 ## Getting Started
 
@@ -92,6 +88,26 @@ You can burn your ISO to DVD many ways.  I found wodim to be useful and quick.  
     sudo wodim -v speed=2 dev=/dev/sr0 -dao <path to your ISO>
 You man need to install wodim:
 &nbsp;&nbsp;dnf install cdrkit
+
+### A few notes on burning...
+To aid the development process as well as demoing the software, there are a couple environment variables to make note of:
+DM_DUMMY_BURN and DM_FAKE_BURN.  If you set these at the shell level, as in "export DM_DUMMY_BURN=1" or "export DM_FAKE_BURN=1" they will do the following:
+
+**DM_FAKE_BURN** - won't do anything close to burning a DVD, it just puts a dialog on screen to show you  that that's where the burning would normally happen.  This is great for demoing.
+
+**DM_DUMMY_BURN** - this will run the wodim burn command with the --dummy parameter, meaning it won't actually burn, but it exercises the full burning process, thus saving DVDs in development.
+
+When you're ready to actually burn a DVD, unset the environment variable with:
+unset DM_FAKE_BURN
+
+or
+
+unset DM_DUMMY_BURN
+
+**NOTE** - if you don't set EITHER variable a DVD will get burned!
+
+
+
 ## Testing the ISO in a VM
 You could burn the ISO immediately to disc and boot from it, but that takes a few minutes and may waste a DVD.  The majority of testing was done using Qemu as a VM.
 You can install qemu with this command:

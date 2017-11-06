@@ -12,6 +12,7 @@ DLG=/usr/bin/dialog
 vtdCount=442
 configType="ElectOS-Tabulator-v${VERSION}"
 configDate="`date +\"%x %X\"`"
+tallyCount=$1
 
 getTabConfigInfo () {
 
@@ -21,6 +22,8 @@ configNameRE='^[a-zA-Z0-9_ .-]+$'
 exec 3>&1
 
 continue=0
+
+#deviceMgr should have passed us a precinct/tally count at startup
 
 #require numerics for the counts 
 until [[ ($vtdCount =~ $vtdCountRE) && ($tallyCount =~ $tallyCountRE) && ($configName =~ $configNameRE) && ($continue == 3) ]] 
@@ -35,7 +38,7 @@ input=$( $DLG --title "$TAB_CONFIG" --output-separator ":" \
 
 if [[ $? != 0 ]]
 then
-    exit
+    exit 1
 fi
 IFS=":" read configName vtdCount tallyCount <<< $input
 continue=0

@@ -14,6 +14,9 @@ DM_CBC="Central Ballot Counter"
 DM_TAB="Tabulator"
 DM_PBC="Precinct Ballot Counter"
 DM_EXIT="Exit"
+DM_BURN_NOW="The ISO image for the selected tool has been created.  Would you like to burn it to disc now?"
+DM_INSERT_DISC="Insert a blank DVD into the DVD Writer and press OK."
+DM_WORKING_ON_THAT="Creating the disc image with your configuration... just a moment..."
 
 
 #Tabulator strings

@@ -20,20 +20,23 @@ PBCBASEISO=${OSETHOME}/ISO/OSET-PBC-${VERSION}.iso
 TEMP=/tmp/answer$$
 
 DLG=/usr/bin/dialog
+XPATH=/usr/bin/xpath
+defaultTallyCount=0
+
 #--------------------------------------------------------------
 createExtraDataFile() {
 
   if [[ "$1" == "tab" ]] 
   then
-     tar zcf $EXTRADATAFILE $EDFFILE $TABCONFIGFILE &>/dev/null
+     tar zcf $EXTRADATAFILE $EDFFILE $TABCONFIGFILE &>/dev/null | $DLG --progressbox "$DM_WORKING_ON_THAT" 10 50
      BASEISO=$TABBASEISO
   elif [[ "$1" == "pbc" ]]
   then
-     tar zcf $EXTRADATAFILE $EDFFILE $PBCCONFIGFILE &>/dev/null
+     tar zcf $EXTRADATAFILE $EDFFILE $PBCCONFIGFILE &>/dev/null| $DLG --progressbox "$DM_WORKING_ON_THAT" 10 50
      BASEISO=$PBCBASEISO
   elif [[ "$1" == "cbc" ]]
   then
-     tar zcf $EXTRADATAFILE $EDFFILE $CBCCONFIGFILE &>/dev/null
+     tar zcf $EXTRADATAFILE $EDFFILE $CBCCONFIGFILE &>/dev/null| $DLG --progressbox "$DM_WORKING_ON_THAT" 10 50
      BASEISO=$CBCBASEISO
   fi
 }
@@ -44,7 +47,42 @@ buildISO() {
 }
 
 burnISO() {
-echo
+    $DLG --yesno "$DM_BURN_NOW" 10 40
+    if [[ $? == 0 ]]
+    then
+       $DLG --yes-label OK --no-label Cancel --yesno "$DM_INSERT_DISC" 10 40
+       if [[ $? == 0 ]]
+       then
+	  #if env variable DM_FAKE_BURN is set, just fake it - don't burn
+	  #and take a ton of time - great for demos
+	  if [ ! -z ${DM_FAKE_BURN+x} ]
+	  then
+	     #for testing/demoing
+	     $DLG --no-ok --no-cancel --pause "pseudo-burning disc..."  7 25 5
+	  else 
+	     #burn, baby, burn! ;-)
+	     #OK, one more way to go through the motions and keep from wasting
+	     #DVDs... set DM_DUMMY_BURN to something and this won't really
+	     #burn anything
+	     if [ -z ${DM_DUMMY_BURN+x} ]
+             then
+		DUMMY=""
+	     else 
+		DUMMY='--dummy'
+             fi
+	     wodim -v speed=2 dev=/dev/sr0 $DUMMY -dao /tmp/`basename $BASEISO` 2>&1 | $DLG --progressbox 15 75
+	  fi
+       else 
+	  return
+       fi
+    else 
+       return
+    fi
+}
+
+getTallyCount () {
+
+    defaultTallyCount=$($XPATH -q -e 'count(/ElectionReport/GpUnitCollection/GpUnit/Type/text()[. = "precinct"])' $EDFFILE)
 
 }
 
@@ -53,12 +91,9 @@ getTabConfigInfo () {
 if [[ -e $TABCONFIGFILE ]] 
 then
     $DLG --yesno "$DM_ALREADY_CREATED_TAB" 10 40
-    if [[ $? != 0 ]]
-    then
-       return
-    fi
 else 
-    ./tabulatorConfigurator.sh
+    getTallyCount
+    ./tabulatorConfigurator.sh $defaultTallyCount
 fi
 return $?
 }
@@ -67,10 +102,6 @@ getCBCConfigInfo () {
 if [[ -e $CBCCONFIGFILE ]] 
 then
     $DLG --yesno "$DM_ALREADY_CREATED_CBC" 10 40
-    if [[ $? != 0 ]]
-    then
-       return
-    fi
 else 
     ./cbcConfigurator.sh
 fi
@@ -82,18 +113,8 @@ getPBCConfigInfo () {
 if [[ -e $PBCCONFIGFILE ]] 
 then
     $DLG --yesno "$DM_ALREADY_CREATED_PBC" 10 40
-    if [[ $? != 0 ]]
-    then
-       return
-    fi
 else 
     ./pbcConfigurator.sh
-fi
-if [[ $? == 0 ]]
-then
-   buildISO pbc 
-  #dialog to user to put a blank DVD in
-  #burn DVD
 fi
 return $?
 }
@@ -112,8 +133,10 @@ if [[ "$EDFFILE" != "" ]]
 then
     #is the file valid??
     #/usr/bin/xmllint --noout --schema $EDFXSD --valid $EDFFILE &> /dev/null
-    xmllintrc=$(/usr/bin/xmllint --noout --nonet $EDFFILE &> /dev/null ; echo $?)
-    $DLG --pause "$DM_VALIDATING_EDF" 10 40 1
+
+    $(/usr/bin/xmllint --nowarning --noout --nonet $EDFFILE; echo $? > /tmp/rcfile ) | $DLG --progressbox "$DM_VALIDATING_EDF" 10 40
+    xmllintrc=`cat /tmp/rcfile`
+
     if [[ $xmllintrc != 0 ]]
     then
 	#uh-oh...
@@ -135,8 +158,7 @@ getCBCConfigInfo
 if [[ $? == 0 ]]
 then
    buildISO cbc 
-  #dialog to user to put a blank DVD in
-  #burn DVD
+   burnISO
 fi
 }
 
@@ -146,8 +168,7 @@ getTabConfigInfo
 if [[ $? == 0 ]]
 then
    buildISO tab 
-  #dialog to user to put a blank DVD in
-  #burn DVD
+   burnISO
 fi
 
 }
@@ -158,8 +179,7 @@ getPBCConfigInfo
 if [[ $? == 0 ]]
 then
    buildISO pbc 
-  #dialog to user to put a blank DVD in
-  #burn DVD
+   burnISO
 fi
 
 }
@@ -168,6 +188,7 @@ fi
 cleanUp() {
   clear
   rm -f /tmp/answer*
+  rm -f /tmp/rcfile
   rm -f /tmp/*Config.json
   rm -f $EDFFILE
   rm -f /tmp/*.iso
@@ -195,6 +216,7 @@ fi
 
 #clean up from last run if necessary
 rm -f /tmp/answer*
+rm -f /tmp/rcfile
 rm -f /tmp/*Config.json
 rm -f /tmp/*.xml
 rm -f /tmp/*.iso

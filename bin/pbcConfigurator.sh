@@ -35,7 +35,7 @@ input=$( $DLG --title "$PBC_CONFIG" --output-separator ":" \
 		 2>&1 1>&3)
 if [[ $? != 0 ]]
 then
-    exit
+    exit 1
 fi
 IFS=":" read configName logLevel <<< $input
 

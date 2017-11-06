@@ -34,7 +34,7 @@ input=$( $DLG --title "$CBC_CONFIG" --output-separator ":" \
         "$CBC_LOG_LEVEL"      4 1    "$logLevel"      4 20  20 0 0  2>&1 1>&3)
 if [[ $? != 0 ]]
 then
-    exit
+    exit 1
 fi
 IFS=":" read configName logLevel <<< $input
 
